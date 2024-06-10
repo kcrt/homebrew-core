@@ -1,8 +1,8 @@
 class Bazel < Formula
   desc "Google's own build tool"
   homepage "https://bazel.build/"
-  url "https://github.com/bazelbuild/bazel/releases/download/7.1.2/bazel-7.1.2-dist.zip"
-  sha256 "9cf6ed2319c816919d97015eef6d0c5942cd1aed48e03c73ba0815d953ed61ab"
+  url "https://github.com/bazelbuild/bazel/releases/download/7.2.0/bazel-7.2.0-dist.zip"
+  sha256 "2070e03d97c4f5ee2d245832d78d17a18f8a4db0669f72a362ff0f84fb091ee1"
   license "Apache-2.0"
 
   livecheck do
@@ -20,7 +20,7 @@ class Bazel < Formula
   end
 
   depends_on "python@3.12" => :build
-  depends_on "openjdk@11"
+  depends_on "openjdk@21"
 
   uses_from_macos "unzip"
   uses_from_macos "zip"
@@ -31,9 +31,9 @@ class Bazel < Formula
     ENV["EMBED_LABEL"] = "#{version}-homebrew"
     # Force Bazel ./compile.sh to put its temporary files in the buildpath
     ENV["BAZEL_WRKDIR"] = buildpath/"work"
-    # Force Bazel to use openjdk@11
+    # Force Bazel to use openjdk@21
     ENV["EXTRA_BAZEL_ARGS"] = "--host_javabase=@local_jdk//:jdk"
-    ENV["JAVA_HOME"] = Language::Java.java_home("11")
+    ENV["JAVA_HOME"] = Language::Java.java_home("21")
     # Force Bazel to use Homebrew python
     ENV.prepend_path "PATH", Formula["python@3.12"].opt_libexec/"bin"
 
@@ -59,7 +59,7 @@ class Bazel < Formula
       bin.install "scripts/packages/bazel.sh" => "bazel"
       ln_s libexec/"bin/bazel-real", bin/"bazel-#{version}"
       (libexec/"bin").install "output/bazel" => "bazel-real"
-      bin.env_script_all_files libexec/"bin", Language::Java.java_home_env("11")
+      bin.env_script_all_files libexec/"bin", Language::Java.java_home_env("21")
 
       bash_completion.install "bazel-bin/scripts/bazel-complete.bash"
       zsh_completion.install "scripts/zsh_completion/_bazel"
