@@ -1881,6 +1881,7 @@ promptfoo
 proselint
 proteinortho
 proto
+protobuf
 protoc-gen-go
 protoc-gen-go-grpc
 protolint
