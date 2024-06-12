@@ -16,9 +16,6 @@ class Watchman < Formula
     sha256 cellar: :any_skip_relocation, x86_64_linux:   "24919bbc7c971be7fe37ea161ea4268604c67dcfe6435dc2258b2050cb4495c3"
   end
 
-  # https://github.com/facebook/watchman/issues/963
-  pour_bottle? only_if: :default_prefix
-
   depends_on "cmake" => :build
   depends_on "cpptoml" => :build
   depends_on "edencommon" => :build
@@ -62,7 +59,7 @@ class Watchman < Formula
                     "-DPython3_EXECUTABLE=#{which("python3.12")}",
                     "-DWATCHMAN_VERSION_OVERRIDE=#{version}",
                     "-DWATCHMAN_BUILDINFO_OVERRIDE=#{tap.user}",
-                    "-DWATCHMAN_STATE_DIR=#{var}/run/watchman",
+                    "-DWATCHMAN_STATE_DIR=",
                     *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
@@ -71,11 +68,6 @@ class Watchman < Formula
     bin.install (path/"bin").children
     lib.install (path/"lib").children
     path.rmtree
-  end
-
-  def post_install
-    (var/"run/watchman").mkpath
-    chmod 042777, var/"run/watchman"
   end
 
   test do
